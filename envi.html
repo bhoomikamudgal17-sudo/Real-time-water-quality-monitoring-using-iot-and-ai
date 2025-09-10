@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Water Quality Monitoring Steps</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to top, #87ceeb, #e0f7fa);
+      text-align: center;
+    }
+    h1 {
+      margin: 20px;
+      color: #004d40;
+    }
+    .scene {
+      position: relative;
+      width: 100%;
+      height: 500px;
+    }
+    /* River */
+    .river {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 180px;
+      background: linear-gradient(to top, #0288d1, #4fc3f7);
+    }
+    /* Bucket */
+    .bucket {
+      position: absolute;
+      bottom: 160px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 100px;
+      border: 5px solid #555;
+      border-radius: 0 0 20px 20px;
+      background: transparent;
+    }
+    .water-fill {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 0%;
+      background: #4fc3f7;
+      border-radius: 0 0 15px 15px;
+      transition: height 2s;
+    }
+    /* Sensor */
+    .sensor {
+      display: none;
+      position: absolute;
+      top: 150px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 100px;
+      background: #2e7d32;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+    /* Cloud */
+    .cloud {
+      display: none;
+      position: absolute;
+      top: 50px;
+      right: 60px;
+      width: 140px;
+      height: 70px;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow: -40px 0 0 #fff, 40px 0 0 #fff, 0 -25px 0 #fff;
+      text-align: center;
+      line-height: 70px;
+      font-weight: bold;
+      color: #333;
+    }
+    /* Dashboard */
+    .dashboard {
+      display: none;
+      position: absolute;
+      top: 150px;
+      right: 50px;
+      width: 220px;
+      background: rgba(255,255,255,0.95);
+      border: 2px solid #0288d1;
+      border-radius: 10px;
+      padding: 10px;
+    }
+    .reading { margin: 5px 0; }
+    /* Alert */
+    .alert {
+      display: none;
+      margin-top: 20px;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: bold;
+      color: white;
+      width: 250px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: left;
+    }
+    .safe { background: #2e7d32; }
+    .unsafe { background: #c62828; }
+  </style>
+</head>
+<body>
+  <h1>🌊 Stepwise Water Quality Monitoring Process 🌍</h1>
+  <button onclick="startProcess()">▶ Start Process</button>
+
+  <div class="scene">
+    <div class="river"></div>
+    <div class="bucket">
+      <div class="water-fill" id="water"></div>
+    </div>
+    <div class="sensor" id="sensor"></div>
+    <div class="cloud" id="cloud">AI/ML</div>
+    <div class="dashboard" id="dashboard">
+      <h3>📊 Readings</h3>
+      <div class="reading" id="ph"></div>
+      <div class="reading" id="turbidity"></div>
+      <div class="reading" id="tds"></div>
+      <div class="reading" id="do"></div>
+    </div>
+  </div>
+
+  <div class="alert" id="alertBox">Checking...</div>
+
+  <script>
+    function startProcess() {
+      const water = document.getElementById("water");
+      const sensor = document.getElementById("sensor");
+      const cloud = document.getElementById("cloud");
+      const dashboard = document.getElementById("dashboard");
+      const alertBox = document.getElementById("alertBox");
+
+      // Step 1: Collect water
+      water.style.height = "100%";
+
+      setTimeout(() => {
+        // Step 2: Show sensor & readings
+        sensor.style.display = "block";
+        dashboard.style.display = "block";
+
+        const ph = (6 + Math.random()*2).toFixed(2);
+        const turbidity = (1 + Math.random()*10).toFixed(1);
+        const tds = (50 + Math.random()*400).toFixed(0);
+        const doLevel = (4 + Math.random()*4).toFixed(1);
+
+        document.getElementById('ph').innerText = "pH: " + ph;
+        document.getElementById('turbidity').innerText = "Turbidity: " + turbidity + " NTU";
+        document.getElementById('tds').innerText = "TDS: " + tds + " ppm";
+        document.getElementById('do').innerText = "DO: " + doLevel + " mg/L";
+
+        setTimeout(() => {
+          // Step 3: Data to AI
+          cloud.style.display = "block";
+
+          setTimeout(() => {
+            // Step 4: AI Result
+            alertBox.style.display = "block";
+            let reasons = [];
+
+            if (ph < 6.5 || ph > 8.5) reasons.push("pH out of safe range (6.5–8.5)");
+            if (turbidity > 5) reasons.push("High turbidity (> 5 NTU)");
+            if (tds > 500) reasons.push("High TDS (> 500 ppm)");
+            if (doLevel < 5) reasons.push("Low dissolved oxygen (< 5 mg/L)");
+
+            if (reasons.length === 0) {
+              alertBox.className = "alert safe";
+              alertBox.innerText = "✅ Water is Safe!";
+            } else {
+              alertBox.className = "alert unsafe";
+              alertBox.innerText = "❌ Unsafe Water:\n- " + reasons.join("\n- ");
+            }
+          }, 2000);
+
+        }, 2000);
+
+      }, 2000);
+    }
+  </script>
+</body>
+</html>
